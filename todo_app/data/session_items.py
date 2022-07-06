@@ -45,7 +45,7 @@ def add_item(title):
     # Determine the ID for the item based on that of the previously added item
     id = items[-1]['id'] + 1 if items else 0
 
-    item = { 'id': id, 'title': title, 'status': 'Not Started' }
+    item = { 'id': id, 'title': title, 'status': 'incomplete' }
 
     # Add the item to the list
     items.append(item)

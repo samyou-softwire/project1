@@ -5,13 +5,13 @@
             <input type="hidden" name="id" value="{{ item.id }}">
             {% if item.status == "incomplete" %}
                 <input type="hidden" name="status" value="complete">
-                <input type="submit" name="changestatus" value="Mark as Completed">
+                <input type="submit" name="changestatus" class="btn btn-primary" value="Mark as Completed">
             {% endif %}
             {% if item.status == "complete" %}
                 <input type="hidden" name="status" value="incomplete">
-                <input type="submit" name="changestatus" value="Mark as Incomplete">
+                <input type="submit" name="changestatus" class="btn btn-secondary" value="Mark as Incomplete">
             {% endif %}
-            <input type="submit" name="delete" value="Delete">
+            <input type="submit" name="delete" class="btn btn-danger" value="Delete">
         </form></li>
     {% endfor %}
     {% if items|length == 0 %}

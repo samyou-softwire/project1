@@ -9,7 +9,9 @@ app.config.from_object(Config())
 
 @app.route('/')
 def index():
-    return render_template("index.html", items=get_items())
+    items = sorted(get_items(), key= lambda item: 1 if item['status'] == 'incomplete' else 2 )
+
+    return render_template("index.html", items=items)
 
 
 @app.route('/add', methods=['POST'])

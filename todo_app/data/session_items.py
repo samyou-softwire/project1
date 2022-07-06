@@ -1,8 +1,8 @@
 from flask import session
 
 _DEFAULT_ITEMS = [
-    { 'id': 1, 'status': 'Not Started', 'title': 'List saved todo items' },
-    { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
+    { 'id': 1, 'status': 'incomplete', 'title': 'List saved todo items' },
+    { 'id': 2, 'status': 'incomplete', 'title': 'Allow new items to be added' }
 ]
 
 
@@ -67,3 +67,11 @@ def save_item(item):
     session['items'] = updated_items
 
     return item
+
+
+def reset_items():
+    """
+    Sets current session items back to the default
+    """
+
+    session.pop('items')

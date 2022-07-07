@@ -6,6 +6,14 @@ _DEFAULT_ITEMS = [
 ]
 
 
+def toggle(status):
+    match status:
+        case "complete":
+            return "incomplete"
+        case "incomplete":
+            return "complete"
+
+
 def get_items():
     """
     Fetches all saved items from the session.

@@ -18,13 +18,13 @@
             {% with items=complete %}
                 {% include "item_list.html" %}
             {% endwith %}
+            <h2>Add a new one</h2>
             <form id="addform" action="{{ url_for("add") }}" method="post">
-                <h2>Add a new one</h2>
-                <label for="itemtitle">Title</label>
-                <input type="text" id="itemtitle" name="title">
-                <br>
-                <br>
-                <input type="submit" value="Add">
+                <div class="form-group">
+                    <label for="itemtitle">Title</label>
+                    <input type="text" class="form-control" id="itemtitle" name="title">
+                </div>
+                <input type="submit" class="btn btn-primary" value="Add">
             </form>
         </div>
     </div>

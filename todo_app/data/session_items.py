@@ -1,12 +1,6 @@
 from os import getenv
 
-from flask import session
 from requests import get, post, delete, put
-
-_DEFAULT_ITEMS = [
-    { 'id': 1, 'status': 'incomplete', 'title': 'List saved todo items' },
-    { 'id': 2, 'status': 'incomplete', 'title': 'Allow new items to be added' }
-]
 
 BOARD_ID = getenv("BOARD_ID")
 

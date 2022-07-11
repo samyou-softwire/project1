@@ -128,11 +128,3 @@ def save_item(item):
     session['items'] = updated_items
 
     return item
-
-
-def reset_items():
-    """
-    Sets current session items back to the default
-    """
-
-    session.pop('items')

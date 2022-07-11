@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 
-from todo_app.data.session_items import get_items, add_item, reset_items, get_item, save_item, delete_item, toggle
+from todo_app.data.session_items import get_items, add_item, get_item, save_item, delete_item, toggle
 from todo_app.flask_config import Config
 
 app = Flask(__name__)
@@ -34,9 +34,3 @@ def update():
         delete_item(item['id'])
 
     return redirect(url_for("index"))
-
-
-@app.route('/reset')
-def reset():
-    reset_items()
-    return "Done!"

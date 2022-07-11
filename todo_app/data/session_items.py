@@ -1,7 +1,7 @@
 from os import getenv
 
 from flask import session
-from requests import get, post, delete
+from requests import get, post, delete, put
 
 _DEFAULT_ITEMS = [
     { 'id': 1, 'status': 'incomplete', 'title': 'List saved todo items' },
@@ -110,7 +110,6 @@ def delete_item(id):
     Args:
         id: The ID of the item.
     """
-    # session['items'] = [item for item in session['items'] if item['id'] != id]
 
     delete(CARD_URL.format(id=id), params=DEFAULT_PARAMS)
 
@@ -122,9 +121,17 @@ def save_item(item):
     Args:
         item: The item to save.
     """
-    existing_items = get_items()
-    updated_items = [item if item['id'] == existing_item['id'] else existing_item for existing_item in existing_items]
 
-    session['items'] = updated_items
+    todo_list_id, done_list_id = get_list_ids()
+
+    list_id = done_list_id if item['status'] == "complete" else todo_list_id
+
+    update_params = {
+        **DEFAULT_PARAMS,
+        'name': item['title'],
+        'idList': list_id
+    }
+
+    put(CARD_URL.format(id=item['id']), params=update_params)
 
     return item

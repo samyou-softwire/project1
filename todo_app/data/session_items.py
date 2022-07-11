@@ -28,6 +28,14 @@ def toggle(status):
             return "complete"
 
 
+def card_to_task(card, status):
+    return {
+        'id': card["id"],
+        'status': status,
+        'title': card["name"]
+    }
+
+
 def get_list_ids():
     response = get(LISTS_ON_BOARD_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
     # TODO: if None, create the list
@@ -40,11 +48,7 @@ def get_list_ids():
 def get_tasks_from_list(id, status):
     response = get(CARDS_ON_LIST_URL.format(id=id), params=DEFAULT_PARAMS).json()
 
-    return [{
-        'id': item["id"],
-        'status': status,
-        'title': item["name"]
-    } for item in response]
+    return [card_to_task(card, status) for card in response]
 
 
 def get_items():
@@ -95,11 +99,7 @@ def add_item(title):
 
     response = post(CARDS_URL, params=add_params).json()
 
-    return {
-        'id': response["id"],
-        'status': "incomplete",
-        'title': response["name"]
-    }
+    return card_to_task(response, "incomplete")
 
 
 def delete_item(id):

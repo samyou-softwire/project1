@@ -11,6 +11,8 @@ _DEFAULT_ITEMS = [
 BOARD_ID = getenv("BOARD_ID")
 
 LISTS_ON_BOARD_URL = "https://api.trello.com/1/boards/{id}/lists"
+CARDS_ON_LIST_URL = "https://api.trello.com/1/lists/{id}/cards"
+
 DEFAULT_PARAMS = {
     'key': getenv("TRELLO_KEY"),
     'token': getenv("TRELLO_TOKEN")
@@ -34,6 +36,16 @@ def get_list_ids():
     return todo_id, done_id
 
 
+def get_tasks_from_list(id, status):
+    response = get(CARDS_ON_LIST_URL.format(id=id), params=DEFAULT_PARAMS).json()
+
+    return [{
+        'id': item["id"],
+        'status': status,
+        'title': item["name"]
+    } for item in response]
+
+
 def get_items():
     """
     Fetches all saved items from the session.
@@ -41,7 +53,10 @@ def get_items():
     Returns:
         list: The list of saved items.
     """
-    return session.get('items', _DEFAULT_ITEMS.copy())
+
+    todo_list_id, done_list_id = get_list_ids()
+
+    return [*get_tasks_from_list(todo_list_id, "incomplete"), *get_tasks_from_list(done_list_id, "complete")]
 
 
 def get_item(id):

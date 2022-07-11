@@ -1,23 +1,25 @@
-<ul class="list-group mb-4">
-    {% for item in items %}
-        <li class="list-group-item"><form class="container" id="{{ "item " ~ item.id }}" action="{{ url_for("update") }}" method="post">
-            <div class="row align-items-center">
-                <input type="hidden" name="id" value="{{ item.id }}">
-                <input type="hidden" name="status" value="{{ item.status }}">
-                <p class="col-sm mb-0">{{ item.title }}</p>
-                <div class="btn-group col-sm" role="group">
-                    {% if item.status == "incomplete" %}
-                        <input type="submit" name="changestatus" class="btn btn-primary" value="Mark as Completed">
-                    {% endif %}
-                    {% if item.status == "complete" %}
-                        <input type="submit" name="changestatus" class="btn btn-secondary" value="Mark as Incomplete">
-                    {% endif %}
-                    <input type="submit" name="delete" class="btn btn-danger" value="Delete">
+{% macro item_list(items) -%}
+    <ul class="list-group mb-4">
+        {% for item in items %}
+            <li class="list-group-item"><form class="container" id="{{ "item " ~ item.id }}" action="{{ url_for("update") }}" method="post">
+                <div class="row align-items-center">
+                    <input type="hidden" name="id" value="{{ item.id }}">
+                    <input type="hidden" name="status" value="{{ item.status }}">
+                    <p class="col-sm mb-0">{{ item.title }}</p>
+                    <div class="btn-group col-sm" role="group">
+                        {% if item.status == "incomplete" %}
+                            <input type="submit" name="changestatus" class="btn btn-primary" value="Mark as Completed">
+                        {% endif %}
+                        {% if item.status == "complete" %}
+                            <input type="submit" name="changestatus" class="btn btn-secondary" value="Mark as Incomplete">
+                        {% endif %}
+                        <input type="submit" name="delete" class="btn btn-danger" value="Delete">
+                    </div>
                 </div>
-            </div>
-        </form></li>
-    {% endfor %}
-    {% if items|length == 0 %}
-        None...
-    {% endif %}
-</ul>
+            </form></li>
+        {% endfor %}
+        {% if items|length == 0 %}
+            None...
+        {% endif %}
+    </ul>
+{% endmacro %}

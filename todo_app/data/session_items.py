@@ -10,8 +10,8 @@ _DEFAULT_ITEMS = [
 
 BOARD_ID = getenv("BOARD_ID")
 
-LISTS_ON_BOARD_URL = "https://api.trello.com/1/boards/{id}/lists"
-CARDS_ON_LIST_URL = "https://api.trello.com/1/lists/{id}/cards"
+BOARD_LISTS_URL = "https://api.trello.com/1/boards/{id}/lists"
+LIST_CARDS_URL = "https://api.trello.com/1/lists/{id}/cards"
 CARDS_URL = "https://api.trello.com/1/cards"
 
 DEFAULT_PARAMS = {
@@ -37,7 +37,7 @@ def card_to_task(card, status):
 
 
 def get_list_ids():
-    response = get(LISTS_ON_BOARD_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
+    response = get(BOARD_LISTS_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
     # TODO: if None, create the list
     todo_id = next((list['id'] for list in response if list['name'] == "To Do"), None)
     done_id = next((list['id'] for list in response if list['name'] == "Done"), None)
@@ -46,7 +46,7 @@ def get_list_ids():
 
 
 def get_tasks_from_list(id, status):
-    response = get(CARDS_ON_LIST_URL.format(id=id), params=DEFAULT_PARAMS).json()
+    response = get(LIST_CARDS_URL.format(id=id), params=DEFAULT_PARAMS).json()
 
     return [card_to_task(card, status) for card in response]
 

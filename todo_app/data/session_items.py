@@ -1,9 +1,20 @@
+from os import getenv
+
 from flask import session
+from requests import get
 
 _DEFAULT_ITEMS = [
     { 'id': 1, 'status': 'incomplete', 'title': 'List saved todo items' },
     { 'id': 2, 'status': 'incomplete', 'title': 'Allow new items to be added' }
 ]
+
+BOARD_ID = getenv("BOARD_ID")
+
+LISTS_ON_BOARD_URL = "https://api.trello.com/1/boards/{id}/lists"
+DEFAULT_PARAMS = {
+    'key': getenv("TRELLO_KEY"),
+    'token': getenv("TRELLO_TOKEN")
+}
 
 
 def toggle(status):
@@ -12,6 +23,15 @@ def toggle(status):
             return "incomplete"
         case "incomplete":
             return "complete"
+
+
+def get_list_ids():
+    response = get(LISTS_ON_BOARD_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
+    # TODO: if None, create the list
+    todo_id = next((list['id'] for list in response if list['name'] == "To Do"), None)
+    done_id = next((list['id'] for list in response if list['name'] == "Done"), None)
+
+    return todo_id, done_id
 
 
 def get_items():

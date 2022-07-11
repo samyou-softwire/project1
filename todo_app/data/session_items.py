@@ -1,6 +1,9 @@
 from os import getenv
+from typing import List
 
 from requests import get, post, delete, put
+
+from todo_app.data.task import Task
 
 BOARD_ID = getenv("BOARD_ID")
 
@@ -23,14 +26,6 @@ def toggle(status):
             return "complete"
 
 
-def card_to_task(card, status):
-    return {
-        'id': card["id"],
-        'status': status,
-        'title': card["name"]
-    }
-
-
 def get_list_ids():
     response = get(BOARD_LISTS_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
     # TODO: if None, create the list
@@ -43,10 +38,10 @@ def get_list_ids():
 def get_tasks_from_list(id, status):
     response = get(LIST_CARDS_URL.format(id=id), params=DEFAULT_PARAMS).json()
 
-    return [card_to_task(card, status) for card in response]
+    return [Task.from_card(card, status) for card in response]
 
 
-def get_items():
+def get_items() -> List[Task]:
     """
     Fetches all saved items from the session.
 
@@ -59,7 +54,7 @@ def get_items():
     return [*get_tasks_from_list(todo_list_id, "incomplete"), *get_tasks_from_list(done_list_id, "complete")]
 
 
-def get_item(id):
+def get_item(id) -> Task | None:
     """
     Fetches the saved item with the specified ID.
 
@@ -70,7 +65,7 @@ def get_item(id):
         item: The saved item, or None if no items match the specified ID.
     """
     items = get_items()
-    return next((item for item in items if item['id'] == id), None)
+    return next((item for item in items if item.id == id), None)
 
 
 def add_item(title):
@@ -94,7 +89,7 @@ def add_item(title):
 
     response = post(CARDS_URL, params=add_params).json()
 
-    return card_to_task(response, "incomplete")
+    return Task.from_card(response, "incomplete")
 
 
 def delete_item(id):
@@ -108,7 +103,7 @@ def delete_item(id):
     delete(CARD_URL.format(id=id), params=DEFAULT_PARAMS)
 
 
-def save_item(item):
+def save_item(item: Task):
     """
     Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
 
@@ -118,14 +113,14 @@ def save_item(item):
 
     todo_list_id, done_list_id = get_list_ids()
 
-    list_id = done_list_id if item['status'] == "complete" else todo_list_id
+    list_id = done_list_id if item.status == "complete" else todo_list_id
 
     update_params = {
         **DEFAULT_PARAMS,
-        'name': item['title'],
+        'name': item.title,
         'idList': list_id
     }
 
-    put(CARD_URL.format(id=item['id']), params=update_params)
+    put(CARD_URL.format(id=item.id), params=update_params)
 
     return item

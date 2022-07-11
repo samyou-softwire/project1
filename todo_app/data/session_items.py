@@ -1,7 +1,7 @@
 from os import getenv
 
 from flask import session
-from requests import get
+from requests import get, post
 
 _DEFAULT_ITEMS = [
     { 'id': 1, 'status': 'incomplete', 'title': 'List saved todo items' },
@@ -12,6 +12,7 @@ BOARD_ID = getenv("BOARD_ID")
 
 LISTS_ON_BOARD_URL = "https://api.trello.com/1/boards/{id}/lists"
 CARDS_ON_LIST_URL = "https://api.trello.com/1/lists/{id}/cards"
+CARDS_URL = "https://api.trello.com/1/cards"
 
 DEFAULT_PARAMS = {
     'key': getenv("TRELLO_KEY"),
@@ -83,18 +84,22 @@ def add_item(title):
     Returns:
         item: The saved item.
     """
-    items = get_items()
 
-    # Determine the ID for the item based on that of the previously added item
-    id = items[-1]['id'] + 1 if items else 0
+    todo_list_id, _ = get_list_ids()
 
-    item = { 'id': id, 'title': title, 'status': 'incomplete' }
+    add_params = {
+        **DEFAULT_PARAMS,
+        'idList': todo_list_id,
+        'name': title
+    }
 
-    # Add the item to the list
-    items.append(item)
-    session['items'] = items
+    response = post(CARDS_URL, params=add_params).json()
 
-    return item
+    return {
+        'id': response["id"],
+        'status': "incomplete",
+        'title': response["name"]
+    }
 
 
 def delete_item(id):

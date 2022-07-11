@@ -10,8 +10,8 @@ app.config.from_object(Config())
 @app.route('/')
 def index():
     items = get_items()
-    incomplete = [item for item in items if item['status'] == 'incomplete']
-    complete = [item for item in items if item['status'] == 'complete']
+    incomplete = [item for item in items if item.status == 'incomplete']
+    complete = [item for item in items if item.status == 'complete']
 
     return render_template("index.html", incomplete=incomplete, complete=complete)
 
@@ -27,10 +27,10 @@ def update():
     item = get_item(request.form.get("id"))
 
     if request.form.get("changestatus") is not None:
-        item['status'] = toggle(request.form.get("status"))
+        item.status = toggle(request.form.get("status"))
         save_item(item)
 
     if request.form.get("delete") is not None:
-        delete_item(item['id'])
+        delete_item(item.id)
 
     return redirect(url_for("index"))

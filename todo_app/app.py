@@ -10,8 +10,8 @@ app.config.from_object(Config())
 @app.route('/')
 def index():
     items = get_items()
-    incomplete = list(filter(lambda item: item['status'] == 'incomplete', items))
-    complete = list(filter(lambda item: item['status'] == 'complete', items))
+    incomplete = [item for item in items if item['status'] == 'incomplete']
+    complete = [item for item in items if item['status'] == 'complete']
 
     return render_template("index.html", incomplete=incomplete, complete=complete)
 

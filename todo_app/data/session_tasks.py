@@ -41,12 +41,12 @@ def get_tasks_from_list(id, status):
     return [Task.from_card(card, status) for card in response]
 
 
-def get_items() -> List[Task]:
+def get_tasks() -> List[Task]:
     """
-    Fetches all saved items from the session.
+    Fetches all saved tasks from the session.
 
     Returns:
-        list: The list of saved items.
+        list: The list of saved tasks.
     """
 
     todo_list_id, done_list_id = get_list_ids()
@@ -54,29 +54,29 @@ def get_items() -> List[Task]:
     return [*get_tasks_from_list(todo_list_id, "incomplete"), *get_tasks_from_list(done_list_id, "complete")]
 
 
-def get_item(id) -> Task | None:
+def get_task(id) -> Task | None:
     """
-    Fetches the saved item with the specified ID.
+    Fetches the saved task with the specified ID.
 
     Args:
-        id: The ID of the item.
+        id: The ID of the task.
 
     Returns:
-        item: The saved item, or None if no items match the specified ID.
+        task: The saved task, or None if no tasks match the specified ID.
     """
-    items = get_items()
-    return next((item for item in items if item.id == id), None)
+    tasks = get_tasks()
+    return next((task for task in tasks if task.id == id), None)
 
 
-def add_item(title):
+def add_task(title):
     """
-    Adds a new item with the specified title to the session.
+    Adds a new task with the specified title to the session.
 
     Args:
-        title: The title of the item.
+        title: The title of the task.
 
     Returns:
-        item: The saved item.
+        task: The saved task.
     """
 
     todo_list_id, _ = get_list_ids()
@@ -92,35 +92,35 @@ def add_item(title):
     return Task.from_card(response, "incomplete")
 
 
-def delete_item(id):
+def delete_task(id):
     """
-    Deletes an item by its ID
+    Deletes an task by its ID
 
     Args:
-        id: The ID of the item.
+        id: The ID of the task.
     """
 
     delete(CARD_URL.format(id=id), params=DEFAULT_PARAMS)
 
 
-def save_item(item: Task):
+def save_task(task: Task):
     """
-    Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
+    Updates an existing task in the session. If no existing task matches the ID of the specified task, nothing is saved.
 
     Args:
-        item: The item to save.
+        task: The task to save.
     """
 
     todo_list_id, done_list_id = get_list_ids()
 
-    list_id = done_list_id if item.status == "complete" else todo_list_id
+    list_id = done_list_id if task.status == "complete" else todo_list_id
 
     update_params = {
         **DEFAULT_PARAMS,
-        'name': item.title,
+        'name': task.title,
         'idList': list_id
     }
 
-    put(CARD_URL.format(id=item.id), params=update_params)
+    put(CARD_URL.format(id=task.id), params=update_params)
 
-    return item
+    return task

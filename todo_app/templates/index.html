@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% from "item_list.html" import item_list as item_list %}
 {% block title %}To-Do App{% endblock %}
 
 {% block content %}
@@ -11,13 +12,9 @@
         <div class="col-md-12">
             <h2>Items</h2>
             <h3>Incomplete</h3>
-            {% with items=incomplete %}
-                {% include "item_list.html" %}
-            {% endwith %}
+            {{ item_list(incomplete) }}
             <h3>Complete</h3>
-            {% with items=complete %}
-                {% include "item_list.html" %}
-            {% endwith %}
+            {{ item_list(complete) }}
             <h2>Add a new one</h2>
             <form id="addform" action="{{ url_for("add") }}" method="post">
                 <div class="form-group">

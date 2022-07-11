@@ -1,7 +1,7 @@
 from os import getenv
 
 from flask import session
-from requests import get, post
+from requests import get, post, delete
 
 _DEFAULT_ITEMS = [
     { 'id': 1, 'status': 'incomplete', 'title': 'List saved todo items' },
@@ -12,6 +12,7 @@ BOARD_ID = getenv("BOARD_ID")
 
 BOARD_LISTS_URL = "https://api.trello.com/1/boards/{id}/lists"
 LIST_CARDS_URL = "https://api.trello.com/1/lists/{id}/cards"
+CARD_URL = "https://api.trello.com/1/cards/{id}"
 CARDS_URL = "https://api.trello.com/1/cards"
 
 DEFAULT_PARAMS = {
@@ -109,7 +110,9 @@ def delete_item(id):
     Args:
         id: The ID of the item.
     """
-    session['items'] = [item for item in session['items'] if item['id'] != id]
+    # session['items'] = [item for item in session['items'] if item['id'] != id]
+
+    delete(CARD_URL.format(id=id), params=DEFAULT_PARAMS)
 
 
 def save_item(item):

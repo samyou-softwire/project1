@@ -28,6 +28,12 @@ function edit_box(id) {
     $submit.removeClass("d-none");
 
     disable($item.find(".edit"))
+    disable($item.find(".delete"))
+    disable($item.find(".changestatus"))
+
+    // re-enable this task's buttons
+    enable($task.find(".delete"))
+    enable($task.find(".changestatus"))
 }
 
 $item.find(".date").datepicker({

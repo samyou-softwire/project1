@@ -34,6 +34,8 @@ def update():
         task.description = request.form.get("description")
 
         due = request.form.get("due")
+        if due == "":
+            due = None
         task.due = dateparser.parse(due) if due is not None else None
         save_task(task)
 

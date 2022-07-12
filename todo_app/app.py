@@ -30,6 +30,10 @@ def update():
         task.status = toggle(request.form.get("status"))
         save_task(task)
 
+    if request.form.get("update") is not None:
+        task.description = request.form.get("description")
+        save_task(task)
+
     if request.form.get("delete") is not None:
         delete_task(task.id)
 

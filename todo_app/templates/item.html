@@ -3,7 +3,7 @@
         <div class="row align-items-center">
             <input type="hidden" name="id" value="{{ item.id }}">
             <input type="hidden" name="status" value="{{ item.status }}">
-            <p class="col-sm mb-0">{{ item.title }}</p>
+            <h4 class="col-sm mb-0">{{ item.title }}</h4>
             <div class="btn-group col-sm" role="group">
                 {% if item.status == "incomplete" %}
                     <input type="submit" name="changestatus" class="btn btn-primary" value="Mark as Completed">
@@ -11,6 +11,7 @@
                 {% if item.status == "complete" %}
                     <input type="submit" name="changestatus" class="btn btn-secondary" value="Mark as Incomplete">
                 {% endif %}
+                <button class="btn btn-warning" onclick="edit_box('{{ item.id }}')">Edit</button>
                 <input type="submit" name="delete" class="btn btn-danger" value="Delete">
             </div>
         </div>

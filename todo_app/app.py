@@ -28,9 +28,8 @@ def update():
 
     if request.form.get("changestatus") is not None:
         task.status = toggle(request.form.get("status"))
-        save_task(task)
 
-    if request.form.get("update") is not None:
+    if request.form.get("update") is not None or request.form.get("changestatus") is not None:
         task.description = request.form.get("description")
         save_task(task)
 

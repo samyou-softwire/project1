@@ -2,6 +2,8 @@ $("#btn-add").mouseup(() => {
     $("#btn-add").addClass('disabled');
 });
 
+let $item = $('.item');
+
 function edit_box(id) {
     const $task = $(`#item${id}`);
 
@@ -18,8 +20,12 @@ function edit_box(id) {
 
     const $submit = $task.find(".submit");
     $submit.removeClass("d-none");
+
+    const otheredits = $item.find(".edit");
+    otheredits.addClass("disabled");
+    otheredits.attr("disabled", "disabled");
 }
 
-$('.item').find(".date").datepicker({
+$item.find(".date").datepicker({
     format: "dd/mm/yyyy"
 });

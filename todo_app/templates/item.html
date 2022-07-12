@@ -6,7 +6,7 @@
             <h4 class="col-sm mb-0">{{ item.title }}</h4>
             <input type="text" class="form-control disabled col-sm description" name="description" value="{{ item.description }}" disabled>
             <input type="text" class="form-control disabled col-sm date" name="due" value="{{
-                        item.due.strftime("%m/%d/%Y") if item.due is not none else ""
+                        item.due.strftime("%d/%m/%Y") if item.due is not none else ""
                     }}" disabled>
             <div class="btn-group col-sm" role="group">
                 {% if item.status == "incomplete" %}

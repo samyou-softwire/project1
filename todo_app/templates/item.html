@@ -1,10 +1,10 @@
 {% macro item(item) %}
-    <form class="container" id="{{ "item " ~ item.id }}" action="{{ url_for("update") }}" method="post">
+    <form class="container" id="{{ "item" ~ item.id }}" action="{{ url_for("update") }}" method="post">
         <div class="row align-items-center">
             <input type="hidden" name="id" value="{{ item.id }}">
             <input type="hidden" name="status" value="{{ item.status }}">
             <h4 class="col-sm mb-0">{{ item.title }}</h4>
-            <input type="text" class="form-control disabled col-sm" name="description" value="{{ item.description }}" disabled>
+            <input type="text" class="form-control disabled col-sm description" name="description" value="{{ item.description }}" disabled>
             <div class="btn-group col-sm" role="group">
                 {% if item.status == "incomplete" %}
                     <input type="submit" name="changestatus" class="btn btn-primary" value="Mark as Completed">
@@ -12,7 +12,7 @@
                 {% if item.status == "complete" %}
                     <input type="submit" name="changestatus" class="btn btn-secondary" value="Mark as Incomplete">
                 {% endif %}
-                <button class="btn btn-warning" onclick="edit_box('{{ item.id }}')">Edit</button>
+                <button type="button" class="btn btn-warning edit" onclick="edit_box('{{ item.id }}')">Edit</button>
                 <input type="submit" name="delete" class="btn btn-danger" value="Delete">
             </div>
         </div>

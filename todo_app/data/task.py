@@ -4,7 +4,7 @@ from dateutil import parser as dateparser
 
 
 class Task:
-    def __init__(self, id: str, title: str, status: str, description: str, due: datetime):
+    def __init__(self, id: str, title: str, status: str, description: str, due: datetime | None):
         self.id = id
         self.title = title
         self.status = status

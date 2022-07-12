@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 
 from todo_app.data.session_tasks import get_tasks, add_task, get_task, save_task, delete_task, toggle
+from todo_app.data.view_model import ViewModel
 from todo_app.flask_config import Config
 from dateutil import parser as dateparser
 
@@ -10,11 +11,9 @@ app.config.from_object(Config())
 
 @app.route('/')
 def index():
-    tasks = get_tasks()
-    incomplete = [task for task in tasks if task.status == 'incomplete']
-    complete = [task for task in tasks if task.status == 'complete']
+    tasks_view_model = ViewModel(get_tasks())
 
-    return render_template("index.html", incomplete=incomplete, complete=complete)
+    return render_template("index.html", view_model=tasks_view_model)
 
 
 @app.route('/add', methods=['POST'])

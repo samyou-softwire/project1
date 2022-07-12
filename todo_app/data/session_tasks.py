@@ -9,6 +9,7 @@ BOARD_ID = getenv("BOARD_ID")
 
 BOARD_URL = "https://api.trello.com/1/boards/{id}"
 BOARD_LISTS_URL = "https://api.trello.com/1/boards/{id}/lists"
+LISTS_URL = "https://api.trello.com/1/lists"
 LIST_CARDS_URL = "https://api.trello.com/1/lists/{id}/cards"
 CARD_URL = "https://api.trello.com/1/cards/{id}"
 CARDS_URL = "https://api.trello.com/1/cards"
@@ -27,11 +28,28 @@ def toggle(status):
             return "complete"
 
 
-def get_list_ids():
+def get_or_create_list(name):
     response = get(BOARD_LISTS_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
-    # TODO: if None, create the list
-    todo_id = next((list['id'] for list in response if list['name'] == "To Do"), None)
-    done_id = next((list['id'] for list in response if list['name'] == "Done"), None)
+
+    id = next((list['id'] for list in response if list['name'] == name), None)
+
+    # if this is ie a new board without the list made yet
+    if id is None:
+        create_list_params = {
+            **DEFAULT_PARAMS,
+            'name': name,
+            'idBoard': get_long_board_id()
+        }
+
+        response = post(LISTS_URL, params=create_list_params).json()
+        return response["id"]
+    else:
+        return id
+
+
+def get_list_ids():
+    todo_id = get_or_create_list("To Do")
+    done_id = get_or_create_list("Done")
 
     return todo_id, done_id
 
@@ -40,11 +58,11 @@ def get_list_ids():
 _long_board_id = None
 
 
-def get_long_board_id(id):
+def get_long_board_id():
     global _long_board_id
 
     if _long_board_id is None:
-        response = get(BOARD_URL.format(id=id), params=DEFAULT_PARAMS).json()
+        response = get(BOARD_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
         _long_board_id = response["id"]
 
     return _long_board_id

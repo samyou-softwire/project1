@@ -32,7 +32,9 @@ def update():
 
     if request.form.get("update") is not None or request.form.get("changestatus") is not None:
         task.description = request.form.get("description")
-        task.due = dateparser.parse(request.form.get("due"))
+
+        due = request.form.get("due")
+        task.due = dateparser.parse(due) if due is not None else None
         save_task(task)
 
     if request.form.get("delete") is not None:

@@ -167,7 +167,8 @@ def save_task(task: Task):
         **DEFAULT_PARAMS,
         'name': task.title,
         'idList': list_id,
-        'desc': task.description
+        'desc': task.description,
+        'due': task.due
     }
 
     put(CARD_URL.format(id=task.id), params=update_params)

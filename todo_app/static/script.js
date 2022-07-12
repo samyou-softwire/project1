@@ -4,16 +4,22 @@ $("#btn-add").mouseup(() => {
 
 let $item = $('.item');
 
+function enable(element) {
+    element.removeClass("disabled");
+    element.removeAttr("disabled");
+}
+
+function disable(element) {
+    element.addClass("disabled");
+    element.attr("disabled", "disabled");
+}
+
 function edit_box(id) {
     const $task = $(`#item${id}`);
 
-    const $description = $task.find(".description");
-    $description.removeClass("disabled");
-    $description.removeAttr("disabled");
+    enable($task.find(".description"))
 
-    const $date = $task.find(".date");
-    $date.removeClass("disabled");
-    $date.removeAttr("disabled");
+    enable($task.find(".date"))
 
     const $edit = $task.find(".edit");
     $edit.addClass("d-none");
@@ -21,9 +27,7 @@ function edit_box(id) {
     const $submit = $task.find(".submit");
     $submit.removeClass("d-none");
 
-    const otheredits = $item.find(".edit");
-    otheredits.addClass("disabled");
-    otheredits.attr("disabled", "disabled");
+    disable($item.find(".edit"))
 }
 
 $item.find(".date").datepicker({

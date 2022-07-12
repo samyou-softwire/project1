@@ -168,7 +168,7 @@ def save_task(task: Task):
         'name': task.title,
         'idList': list_id,
         'desc': task.description,
-        'due': task.due.strftime("%Y-%m-%dT%H:%M:%S") if task.due is not None else None
+        'due': task.due.strftime("%Y-%m-%dT%H:%M:%S") if task.due is not None else ""
     }
 
     put(CARD_URL.format(id=task.id), params=update_params)

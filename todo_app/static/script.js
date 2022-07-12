@@ -7,6 +7,7 @@ let $item = $('.item');
 function enable(element) {
     element.removeClass("disabled");
     element.removeAttr("disabled");
+    element.removeAttr("readonly");
 }
 
 function disable(element) {

@@ -4,10 +4,10 @@
             <input type="hidden" name="id" value="{{ item.id }}">
             <input type="hidden" name="status" value="{{ item.status }}">
             <h4 class="col-sm mb-0">{{ item.title }}</h4>
-            <input type="text" class="form-control disabled col-sm description" name="description" value="{{ item.description }}" disabled>
+            <input type="text" class="form-control disabled col-sm description" name="description" value="{{ item.description }}" readonly>
             <input type="text" class="form-control disabled col-sm date" name="due" value="{{
                         item.due.strftime("%d/%m/%Y") if item.due is not none else ""
-                    }}" disabled>
+                    }}" readonly>
             <div class="btn-group col-sm" role="group">
                 {% if item.status == "incomplete" %}
                     <input type="submit" name="changestatus" class="btn btn-primary changestatus should-disable" value="Mark as Completed">

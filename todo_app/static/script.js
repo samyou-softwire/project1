@@ -1,6 +1,6 @@
-$("#btn-add").mouseup(() => {
-    $("#btn-add").addClass('disabled');
-});
+$("form").submit(() =>
+    disable($(".should-disable"))
+);
 
 let $item = $('.item');
 

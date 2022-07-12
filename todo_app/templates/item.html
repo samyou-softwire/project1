@@ -10,14 +10,14 @@
                     }}" disabled>
             <div class="btn-group col-sm" role="group">
                 {% if item.status == "incomplete" %}
-                    <input type="submit" name="changestatus" class="btn btn-primary changestatus" value="Mark as Completed">
+                    <input type="submit" name="changestatus" class="btn btn-primary changestatus should-disable" value="Mark as Completed">
                 {% endif %}
                 {% if item.status == "complete" %}
-                    <input type="submit" name="changestatus" class="btn btn-secondary changestatus" value="Mark as Incomplete">
+                    <input type="submit" name="changestatus" class="btn btn-secondary changestatus should-disable" value="Mark as Incomplete">
                 {% endif %}
-                <button type="button" class="btn btn-warning edit" onclick="edit_box('{{ item.id }}')">Edit</button>
-                <input type="submit" name="update" value="Submit" class="btn btn-warning submit d-none">
-                <input type="submit" name="delete" class="btn btn-danger delete" value="Delete">
+                <button type="button" class="btn btn-warning edit should-disable" onclick="edit_box('{{ item.id }}')">Edit</button>
+                <input type="submit" name="update" value="Submit" class="btn btn-warning submit d-none should-disable">
+                <input type="submit" name="delete" class="btn btn-danger delete should-disable" value="Delete">
             </div>
         </div>
     </form>

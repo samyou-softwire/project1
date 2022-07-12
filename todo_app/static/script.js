@@ -20,4 +20,6 @@ function edit_box(id) {
     submit.removeClass("d-none");
 }
 
-$('.item').find(".date").datepicker({});
+$('.item').find(".date").datepicker({
+    format: "dd/mm/yyyy"
+});

@@ -10,4 +10,8 @@ function edit_box(id) {
     description.removeAttr("disabled");
 
     const edit = task.find(".edit");
+    edit.addClass("d-none");
+
+    const submit = task.find(".submit");
+    submit.removeClass("d-none");
 }

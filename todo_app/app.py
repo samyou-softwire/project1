@@ -26,11 +26,12 @@ def add():
 @app.route('/update', methods=['POST'])
 def update():
     task = get_task(request.form.get("id"))
+    submit_type = request.form.get("submittype")
 
-    if request.form.get("changestatus") is not None:
+    if submit_type == "changestatus":
         task.status = toggle(request.form.get("status"))
 
-    if request.form.get("update") is not None or request.form.get("changestatus") is not None:
+    if submit_type in ["changestatus", "update"]:
         task.description = request.form.get("description")
 
         due = request.form.get("due")
@@ -39,7 +40,7 @@ def update():
         task.due = dateparser.parse(due) if due is not None else None
         save_task(task)
 
-    if request.form.get("delete") is not None:
+    if submit_type == "delete" is not None:
         delete_task(task.id)
 
     return redirect(url_for("index"))

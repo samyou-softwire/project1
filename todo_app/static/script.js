@@ -3,6 +3,7 @@ $("form").submit(() =>
 );
 
 let $item = $('.item');
+let $submitType = $item.find(".submittype")
 
 function enable(element) {
     element.removeClass("disabled");
@@ -14,6 +15,16 @@ function disable(element) {
     element.addClass("disabled");
     element.attr("disabled", "disabled");
 }
+
+$item.find(".changestatus").click(() => {
+    $submitType.attr("value", "changestatus")
+})
+$item.find(".submit").click(() => {
+    $submitType.attr("value", "update")
+})
+$item.find(".delete").click(() => {
+    $submitType.attr("value", "delete")
+})
 
 function edit_box(id) {
     const $task = $(`#item${id}`);

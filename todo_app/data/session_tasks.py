@@ -7,12 +7,14 @@ from todo_app.data.task import Task
 
 BOARD_ID = getenv("BOARD_ID")
 
-BOARD_URL = "https://api.trello.com/1/boards/{id}"
-BOARD_LISTS_URL = "https://api.trello.com/1/boards/{id}/lists"
-LISTS_URL = "https://api.trello.com/1/lists"
-LIST_CARDS_URL = "https://api.trello.com/1/lists/{id}/cards"
-CARD_URL = "https://api.trello.com/1/cards/{id}"
-CARDS_URL = "https://api.trello.com/1/cards"
+BASE_URL = "https://api.trello.com/1/"
+
+BOARD_URL = "%s/boards/{id}" % BASE_URL
+BOARD_LISTS_URL = "%s/boards/{id}/lists" % BASE_URL
+LISTS_URL = "%s/lists" % BASE_URL
+LIST_CARDS_URL = "%s/lists/{id}/cards" % BASE_URL
+CARD_URL = "%s/cards/{id}" % BASE_URL
+CARDS_URL = "%s/cards" % BASE_URL
 
 DEFAULT_PARAMS = {
     'key': getenv("TRELLO_KEY"),

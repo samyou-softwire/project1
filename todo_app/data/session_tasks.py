@@ -7,6 +7,7 @@ from todo_app.data.task import Task
 
 BOARD_ID = getenv("BOARD_ID")
 
+BOARD_URL = "https://api.trello.com/1/boards/{id}"
 BOARD_LISTS_URL = "https://api.trello.com/1/boards/{id}/lists"
 LIST_CARDS_URL = "https://api.trello.com/1/lists/{id}/cards"
 CARD_URL = "https://api.trello.com/1/cards/{id}"
@@ -33,6 +34,20 @@ def get_list_ids():
     done_id = next((list['id'] for list in response if list['name'] == "Done"), None)
 
     return todo_id, done_id
+
+
+# lazy loads the long board id
+_long_board_id = None
+
+
+def get_long_board_id(id):
+    global _long_board_id
+
+    if _long_board_id is None:
+        response = get(BOARD_URL.format(id=id), params=DEFAULT_PARAMS).json()
+        _long_board_id = response["id"]
+
+    return _long_board_id
 
 
 def get_tasks_from_list(id, status):

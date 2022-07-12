@@ -4,16 +4,34 @@
             <input type="hidden" name="id" value="{{ item.id }}">
             <input type="hidden" name="status" value="{{ item.status }}">
             <h4 class="col-sm mb-0">{{ item.title }}</h4>
-            <input type="text" class="form-control disabled col-sm description" name="description" value="{{ item.description }}" readonly>
-            <input type="text" class="form-control disabled col-sm date" name="due" value="{{
+            <input
+                    type="text"
+                    class="form-control disabled col-sm description"
+                    name="description"
+                    value="{{ item.description }}"
+                    readonly>
+            <input
+                    type="text"
+                    class="form-control disabled col-sm date"
+                    name="due"
+                    value="{{
                         item.due.strftime("%d/%m/%Y") if item.due is not none else ""
-                    }}" readonly>
+                    }}"
+                    readonly>
             <div class="btn-group col-sm" role="group">
                 {% if item.status == "incomplete" %}
-                    <input type="submit" name="changestatus" class="btn btn-primary changestatus should-disable" value="Mark as Completed">
+                    <input
+                            type="submit"
+                            name="changestatus"
+                            class="btn btn-primary changestatus should-disable"
+                            value="Mark as Completed">
                 {% endif %}
                 {% if item.status == "complete" %}
-                    <input type="submit" name="changestatus" class="btn btn-secondary changestatus should-disable" value="Mark as Incomplete">
+                    <input
+                            type="submit"
+                            name="changestatus"
+                            class="btn btn-secondary changestatus should-disable"
+                            value="Mark as Incomplete">
                 {% endif %}
                 <button type="button" class="btn btn-warning edit should-disable" onclick="edit_box('{{ item.id }}')">Edit</button>
                 <input type="submit" name="update" value="Submit" class="btn btn-warning submit d-none should-disable">

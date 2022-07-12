@@ -31,6 +31,7 @@ def update():
 
     if request.form.get("update") is not None or request.form.get("changestatus") is not None:
         task.description = request.form.get("description")
+        task.due = request.form.get("due")
         save_task(task)
 
     if request.form.get("delete") is not None:

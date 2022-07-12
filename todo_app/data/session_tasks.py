@@ -1,3 +1,4 @@
+from json import JSONDecodeError
 from os import getenv
 from typing import List
 
@@ -100,9 +101,19 @@ def get_task(id) -> Task | None:
         task: The saved task, or None if no tasks match the specified ID.
     """
 
-    # TODO: send a request for that task only
-    tasks = get_tasks()
-    return next((task for task in tasks if task.id == id), None)
+    try:
+        response = get(CARD_URL.format(id=id), params=DEFAULT_PARAMS).json()
+    except JSONDecodeError:
+        return None
+
+    todo_list_id, done_list_id = get_list_ids()
+
+    if response['idList'] == done_list_id:
+        status = "complete"
+    else:
+        status = "incomplete"
+
+    return Task.from_card(response, status)
 
 
 def add_task(title):

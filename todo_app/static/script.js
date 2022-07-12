@@ -15,3 +15,5 @@ function edit_box(id) {
     const submit = task.find(".submit");
     submit.removeClass("d-none");
 }
+
+$('.item').find(".date").datepicker({});

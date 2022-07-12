@@ -13,7 +13,7 @@ app.config.from_object(Config())
 def index():
     tasks_view_model = ViewModel(get_tasks())
 
-    return render_template("index.html", view_model=tasks_view_model)
+    return render_template("templates/index.html", view_model=tasks_view_model)
 
 
 @app.route('/add', methods=['POST'])

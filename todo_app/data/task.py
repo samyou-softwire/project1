@@ -1,5 +1,10 @@
+from datetime import datetime
+
+from dateutil import parser as dateparser
+
+
 class Task:
-    def __init__(self, id: str, title: str, status: str, description: str, due: str):
+    def __init__(self, id: str, title: str, status: str, description: str, due: datetime):
         self.id = id
         self.title = title
         self.status = status
@@ -8,4 +13,10 @@ class Task:
 
     @staticmethod
     def from_card(card, status):
-        return Task(card['id'], card['name'], status, card['desc'], card['due'])
+        due_str = card['due']
+        if due_str is None:
+            due = None
+        else:
+            due = dateparser.parse(due_str)
+
+        return Task(card['id'], card['name'], status, card['desc'], due)

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 
 from todo_app.data.session_tasks import get_tasks, add_task, get_task, save_task, delete_task, toggle
 from todo_app.flask_config import Config
+from dateutil import parser as dateparser
 
 app = Flask(__name__)
 app.config.from_object(Config())
@@ -31,7 +32,7 @@ def update():
 
     if request.form.get("update") is not None or request.form.get("changestatus") is not None:
         task.description = request.form.get("description")
-        task.due = request.form.get("due")
+        task.due = dateparser.parse(request.form.get("due"))
         save_task(task)
 
     if request.form.get("delete") is not None:

@@ -99,6 +99,8 @@ def get_task(id) -> Task | None:
     Returns:
         task: The saved task, or None if no tasks match the specified ID.
     """
+
+    # TODO: send a request for that task only
     tasks = get_tasks()
     return next((task for task in tasks if task.id == id), None)
 

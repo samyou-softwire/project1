@@ -5,7 +5,7 @@
             <input type="hidden" name="status" value="{{ item.status }}">
             <h4 class="col-sm mb-0">{{ item.title }}</h4>
             <input type="text" class="form-control disabled col-sm description" name="description" value="{{ item.description }}" disabled>
-            <input type="text" class="form-control col-sm date" name="due">
+            <input type="text" class="form-control disabled col-sm date" name="due" disabled>
             <div class="btn-group col-sm" role="group">
                 {% if item.status == "incomplete" %}
                     <input type="submit" name="changestatus" class="btn btn-primary" value="Mark as Completed">

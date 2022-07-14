@@ -6,6 +6,7 @@ from pytest import fixture
 from dotenv import load_dotenv, find_dotenv
 
 from todo_app import app
+from todo_app.data.task import Task
 
 
 @fixture
@@ -65,7 +66,10 @@ def get_stub(url, params):
 
 
 def post_stub(url, params):
-    return StubResponse(TEST_TASKS[0])
+    return StubResponse({
+        **TEST_TASKS[0],
+        'name': params['name']
+    })
 
 
 def test_index_page(monkeypatch, client):
@@ -83,6 +87,9 @@ def test_add(mocker, monkeypatch, client):
     monkeypatch.setattr(requests, 'post', post_stub)
     spy: MagicMock = mocker.spy(requests, "post")
 
-    client.post("/add")
+    client.post("/add", data={'title': "Test Title"})
 
     assert spy.call_count == 1
+
+    added_task = spy.spy_return.json()
+    assert added_task['name'] == "Test Title"

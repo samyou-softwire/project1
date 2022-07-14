@@ -2,7 +2,7 @@ from json import JSONDecodeError
 from os import getenv
 from typing import List
 
-from requests import get, post, delete, put
+import requests
 
 from todo_app.data.task import Task
 
@@ -32,7 +32,7 @@ def toggle(status):
 
 
 def get_or_create_list(name):
-    response = get(BOARD_LISTS_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
+    response = requests.get(BOARD_LISTS_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
 
     id = next((list['id'] for list in response if list['name'] == name), None)
 
@@ -44,7 +44,7 @@ def get_or_create_list(name):
             'idBoard': get_long_board_id()
         }
 
-        response = post(LISTS_URL, params=create_list_params).json()
+        response = requests.post(LISTS_URL, params=create_list_params).json()
         return response["id"]
     else:
         return id
@@ -65,14 +65,14 @@ def get_long_board_id():
     global _long_board_id
 
     if _long_board_id is None:
-        response = get(BOARD_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
+        response = requests.get(BOARD_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
         _long_board_id = response["id"]
 
     return _long_board_id
 
 
 def get_tasks_from_list(id, status):
-    response = get(LIST_CARDS_URL.format(id=id), params=DEFAULT_PARAMS).json()
+    response = requests.get(LIST_CARDS_URL.format(id=id), params=DEFAULT_PARAMS).json()
 
     return [Task.from_card(card, status) for card in response]
 
@@ -102,7 +102,7 @@ def get_task(id) -> Task | None:
     """
 
     try:
-        response = get(CARD_URL.format(id=id), params=DEFAULT_PARAMS).json()
+        response = requests.get(CARD_URL.format(id=id), params=DEFAULT_PARAMS).json()
     except JSONDecodeError:
         return None
 
@@ -135,7 +135,7 @@ def add_task(title):
         'name': title
     }
 
-    response = post(CARDS_URL, params=add_params).json()
+    response = requests.post(CARDS_URL, params=add_params).json()
 
     return Task.from_card(response, "incomplete")
 
@@ -148,7 +148,7 @@ def delete_task(id):
         id: The ID of the task.
     """
 
-    delete(CARD_URL.format(id=id), params=DEFAULT_PARAMS)
+    requests.delete(CARD_URL.format(id=id), params=DEFAULT_PARAMS)
 
 
 def save_task(task: Task):
@@ -171,6 +171,6 @@ def save_task(task: Task):
         'due': task.due.strftime("%Y-%m-%dT%H:%M:%S") if task.due is not None else ""
     }
 
-    put(CARD_URL.format(id=task.id), params=update_params)
+    requests.put(CARD_URL.format(id=task.id), params=update_params)
 
     return task

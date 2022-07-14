@@ -10,12 +10,12 @@ BOARD_ID = getenv("BOARD_ID")
 
 BASE_URL = "https://api.trello.com/1/"
 
-BOARD_URL = "%s/boards/{id}" % BASE_URL
-BOARD_LISTS_URL = "%s/boards/{id}/lists" % BASE_URL
-LISTS_URL = "%s/lists" % BASE_URL
-LIST_CARDS_URL = "%s/lists/{id}/cards" % BASE_URL
-CARD_URL = "%s/cards/{id}" % BASE_URL
-CARDS_URL = "%s/cards" % BASE_URL
+BOARD_URL = "%sboards/{id}" % BASE_URL
+BOARD_LISTS_URL = "%sboards/{id}/lists" % BASE_URL
+LISTS_URL = "%slists" % BASE_URL
+LIST_CARDS_URL = "%slists/{id}/cards" % BASE_URL
+CARD_URL = "%scards/{id}" % BASE_URL
+CARDS_URL = "%scards" % BASE_URL
 
 DEFAULT_PARAMS = {
     'key': getenv("TRELLO_KEY"),

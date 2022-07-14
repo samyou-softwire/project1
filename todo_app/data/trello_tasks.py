@@ -13,6 +13,7 @@ BOARD_ID = None
 ORGANIZATION_ID = None
 
 BOARD_URL = None
+BOARDS_URL = None
 BOARD_LISTS_URL = None
 LISTS_URL = None
 LIST_CARDS_URL = None
@@ -26,13 +27,14 @@ DEFAULT_PARAMS = {
 
 
 def init_env():
-    global BOARD_ID, ORGANIZATION_ID, BASE_URL, BOARD_URL, BOARD_LISTS_URL, \
+    global BOARD_ID, ORGANIZATION_ID, BASE_URL, BOARD_URL, BOARDS_URL, BOARD_LISTS_URL, \
            LISTS_URL, LIST_CARDS_URL, CARD_URL, CARDS_URL, DEFAULT_PARAMS
 
     BOARD_ID = getenv("BOARD_ID")
     ORGANIZATION_ID = getenv("ORGANIZATION_ID")
 
     BOARD_URL = "%sboards/{id}" % BASE_URL
+    BOARDS_URL = "%sboards" % BASE_URL
     BOARD_LISTS_URL = "%sboards/{id}/lists" % BASE_URL
     LISTS_URL = "%slists" % BASE_URL
     LIST_CARDS_URL = "%slists/{id}/cards" % BASE_URL

@@ -1,4 +1,5 @@
 from os import getenv
+from unittest.mock import MagicMock
 
 import requests
 from pytest import fixture
@@ -38,16 +39,16 @@ TEST_TASKS = [
     }
 ]
 
+class StubResponse:
+    def __init__(self, fake_response_data):
+        self.fake_response_data = fake_response_data
 
-def stub(url, params):
+    def json(self):
+        return self.fake_response_data
+
+
+def get_stub(url, params):
     board_id = getenv('BOARD_ID')
-
-    class StubResponse:
-        def __init__(self, fake_response_data):
-            self.fake_response_data = fake_response_data
-
-        def json(self):
-            return self.fake_response_data
 
     # must be imported now else it'll have None value its initialised with
     from todo_app.data.session_tasks import BOARD_LISTS_URL
@@ -63,8 +64,12 @@ def stub(url, params):
     raise Exception(f"Unknown URL {url}")
 
 
+def post_stub(url, params):
+    return StubResponse(TEST_TASKS[0])
+
+
 def test_index_page(monkeypatch, client):
-    monkeypatch.setattr(requests, 'get', stub)
+    monkeypatch.setattr(requests, 'get', get_stub)
 
     response = client.get("/")
 
@@ -72,3 +77,12 @@ def test_index_page(monkeypatch, client):
     assert "Task 1" in response.data.decode()
     assert "Complete me" in response.data.decode()
 
+
+def test_add(mocker, monkeypatch, client):
+    monkeypatch.setattr(requests, 'get', get_stub)
+    monkeypatch.setattr(requests, 'post', post_stub)
+    spy: MagicMock = mocker.spy(requests, "post")
+
+    client.post("/add")
+
+    assert spy.call_count == 1

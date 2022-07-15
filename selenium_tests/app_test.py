@@ -70,7 +70,7 @@ def add_task(name, driver):
     add_button.click()
 
 
-def find_action_button(name, driver, button_name):
+def find_task_element(name, driver, button_name):
     label = driver.find_element(By.NAME, name)
     parent: WebElement = label.find_element(By.XPATH, "./..")
     button = parent.find_element(By.NAME, button_name)
@@ -84,14 +84,12 @@ def task_is(status, name, driver):
     assert not unwanted_list.find_elements(By.NAME, name)
 
 
-@pytest.mark.skip
 def test_app_loads(driver, app_with_temp_board):
     driver.get("http://localhost:5000")
 
     assert driver.title == 'To-Do App'
 
 
-@pytest.mark.skip
 def test_add_element(driver, app_with_temp_board):
     driver.get("http://localhost:5000")
 
@@ -100,7 +98,6 @@ def test_add_element(driver, app_with_temp_board):
     assert "This is a hard task" in driver.page_source
 
 
-@pytest.mark.skip
 def test_delete_element(driver, app_with_temp_board):
     delete_me = "Please delete this task"
 
@@ -110,13 +107,12 @@ def test_delete_element(driver, app_with_temp_board):
 
     assert delete_me in driver.page_source
 
-    button = find_action_button(delete_me, driver, "delete")
+    button = find_task_element(delete_me, driver, "delete")
     button.click()
 
     assert delete_me not in driver.page_source
 
 
-@pytest.mark.skip
 def test_delete_element_with_others_on_page(driver, app_with_temp_board):
     dont_delete_me = "Please DO NOT delete this task"
     delete_me = "Please delete this task"
@@ -132,7 +128,7 @@ def test_delete_element_with_others_on_page(driver, app_with_temp_board):
     assert dont_delete_me in driver.page_source
     assert dont_delete_me2 in driver.page_source
 
-    button = find_action_button(delete_me, driver, "delete")
+    button = find_task_element(delete_me, driver, "delete")
     button.click()
 
     assert delete_me not in driver.page_source
@@ -140,7 +136,6 @@ def test_delete_element_with_others_on_page(driver, app_with_temp_board):
     assert dont_delete_me2 in driver.page_source
 
 
-@pytest.mark.skip
 def test_new_task_goes_to_incomplete(driver, app_with_temp_board):
     this_is_a_new_incomplete_task = "This is a new incomplete task"
 
@@ -151,7 +146,6 @@ def test_new_task_goes_to_incomplete(driver, app_with_temp_board):
     task_is("incomplete", this_is_a_new_incomplete_task, driver)
 
 
-@pytest.mark.skip
 def test_switching_between_tasks(driver, app_with_temp_board):
     this_is_an_incomplete_task = "This is an incomplete task"
 
@@ -161,7 +155,7 @@ def test_switching_between_tasks(driver, app_with_temp_board):
 
     task_is("incomplete", this_is_an_incomplete_task, driver)
 
-    change_status_button = find_action_button(this_is_an_incomplete_task, driver, "changestatus")
+    change_status_button = find_task_element(this_is_an_incomplete_task, driver, "changestatus")
     change_status_button.click()
 
     task_is("complete", this_is_an_incomplete_task, driver)
@@ -175,13 +169,13 @@ def test_adding_description(driver, app_with_temp_board):
 
     add_task(rename_me, driver)
 
-    edit_button = find_action_button(rename_me, driver, "edit")
+    edit_button = find_task_element(rename_me, driver, "edit")
     edit_button.click()
 
-    description_box = find_action_button(rename_me, driver, "description")
+    description_box = find_task_element(rename_me, driver, "description")
     description_box.send_keys(new_description)
 
-    submit_button = find_action_button(rename_me, driver, "submit")
+    submit_button = find_task_element(rename_me, driver, "submit")
     submit_button.click()
 
     assert new_description in driver.page_source

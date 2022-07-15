@@ -38,7 +38,7 @@ def create_app():
             due = request.form.get("due")
             if due == "":
                 due = None
-            task.due = dateparser.parse(due) if due is not None else None
+            task.due = dateparser.parse(due) if due else None
             save_task(task)
 
         if submit_type == "delete" is not None:

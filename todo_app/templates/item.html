@@ -34,8 +34,8 @@
                             value="Mark as Incomplete"
                             name="changestatus">
                 {% endif %}
-                <button type="button" class="btn btn-warning edit should-disable" onclick="edit_box('{{ item.id }}')">Edit</button>
-                <input type="submit" value="Submit" class="btn btn-warning submit d-none should-disable">
+                <button type="button" class="btn btn-warning edit should-disable" onclick="edit_box('{{ item.id }}')" name="edit">Edit</button>
+                <input type="submit" value="Submit" class="btn btn-warning submit d-none should-disable" name="submit">
                 <input type="submit" class="btn btn-danger delete should-disable" value="Delete" name="delete">
             </div>
         </div>

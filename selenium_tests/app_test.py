@@ -93,10 +93,8 @@ def test_delete_element(driver, app_with_temp_board):
 
     assert delete_me in driver.page_source
 
-    renamed_label = driver.find_element(By.NAME, delete_me)
-    parent: WebElement = renamed_label.find_element(By.XPATH, "./..")
-    delete_button = parent.find_element(By.NAME, "delete")
-    delete_button.click()
+    button = find_action_button(delete_me, driver, "delete")
+    button.click()
 
     assert delete_me not in driver.page_source
 
@@ -116,10 +114,8 @@ def test_delete_element_with_others_on_page(driver, app_with_temp_board):
     assert dont_delete_me in driver.page_source
     assert dont_delete_me2 in driver.page_source
 
-    renamed_label = driver.find_element(By.NAME, delete_me)
-    parent: WebElement = renamed_label.find_element(By.XPATH, "./..")
-    delete_button = parent.find_element(By.NAME, "delete")
-    delete_button.click()
+    button = find_action_button(delete_me, driver, "delete")
+    button.click()
 
     assert delete_me not in driver.page_source
     assert dont_delete_me in driver.page_source

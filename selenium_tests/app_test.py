@@ -84,6 +84,14 @@ def task_is(status, name, driver):
     assert not unwanted_list.find_elements(By.NAME, name)
 
 
+def task_exists(name, driver):
+    assert driver.find_elements(By.NAME, name)
+
+
+def task_not_exists(name, driver):
+    assert not driver.find_elements(By.NAME, name)
+
+
 def test_app_loads(driver, app_with_temp_board):
     driver.get("http://localhost:5000")
 
@@ -95,7 +103,7 @@ def test_add_element(driver, app_with_temp_board):
 
     add_task("This is a hard task", driver)
 
-    assert "This is a hard task" in driver.page_source
+    task_exists("This is a hard task", driver)
 
 
 def test_delete_element(driver, app_with_temp_board):
@@ -110,7 +118,7 @@ def test_delete_element(driver, app_with_temp_board):
     button = find_task_element(delete_me, driver, "delete")
     button.click()
 
-    assert delete_me not in driver.page_source
+    task_not_exists(delete_me, driver)
 
 
 def test_delete_element_with_others_on_page(driver, app_with_temp_board):
@@ -120,20 +128,20 @@ def test_delete_element_with_others_on_page(driver, app_with_temp_board):
 
     driver.get("http://localhost:5000")
 
-    add_task(delete_me, driver)
     add_task(dont_delete_me, driver)
+    add_task(delete_me, driver)
     add_task(dont_delete_me2, driver)
 
-    assert delete_me in driver.page_source
-    assert dont_delete_me in driver.page_source
-    assert dont_delete_me2 in driver.page_source
+    task_exists(delete_me, driver)
+    task_exists(dont_delete_me, driver)
+    task_exists(dont_delete_me2, driver)
 
     button = find_task_element(delete_me, driver, "delete")
     button.click()
 
-    assert delete_me not in driver.page_source
-    assert dont_delete_me in driver.page_source
-    assert dont_delete_me2 in driver.page_source
+    task_not_exists(delete_me, driver)
+    task_exists(dont_delete_me, driver)
+    task_exists(dont_delete_me2, driver)
 
 
 def test_new_task_goes_to_incomplete(driver, app_with_temp_board):

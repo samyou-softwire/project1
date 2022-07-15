@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 
-from todo_app.data import session_tasks
-from todo_app.data.session_tasks import get_tasks, add_task, get_task, save_task, delete_task, toggle
+from todo_app.data import trello_tasks
+from todo_app.data.trello_tasks import get_tasks, add_task, get_task, save_task, delete_task, toggle
 from todo_app.data.view_model import ViewModel
 from todo_app.flask_config import Config
 from dateutil import parser as dateparser

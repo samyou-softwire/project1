@@ -52,11 +52,11 @@ def get_stub(url, params):
     board_id = getenv('BOARD_ID')
 
     # must be imported now else it'll have None value its initialised with
-    from todo_app.data.session_tasks import BOARD_LISTS_URL
+    from todo_app.data.trello_tasks import BOARD_LISTS_URL
     if url == BOARD_LISTS_URL.format(id=board_id):
         return StubResponse(TEST_LISTS)
 
-    from todo_app.data.session_tasks import LIST_CARDS_URL
+    from todo_app.data.trello_tasks import LIST_CARDS_URL
 
     for list in TEST_LISTS:
         if url == LIST_CARDS_URL.format(id=list['id']):

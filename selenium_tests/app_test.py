@@ -12,14 +12,14 @@ from todo_app import app
 import pytest
 
 from todo_app.data import session_tasks
+from todo_app.data.env import get_default_params, get_organization_id, get_board_id
+from todo_app.data.session_tasks import BOARD_URL, BOARDS_URL
 
 
 def create_test_board():
-    from todo_app.data.session_tasks import ORGANIZATION_ID, BOARDS_URL, DEFAULT_PARAMS
-
     create_params = {
-        **DEFAULT_PARAMS,
-        'idOrganization': ORGANIZATION_ID,
+        **get_default_params(),
+        'idOrganization': get_organization_id(),
         'defaultLists': "false",
         'name': "TEST"
     }
@@ -30,39 +30,29 @@ def create_test_board():
 
 
 def delete_test_board(id):
-    from todo_app.data.session_tasks import BOARD_URL, DEFAULT_PARAMS
-
-    delete(BOARD_URL.format(id=id), params=DEFAULT_PARAMS)
+    delete(BOARD_URL.format(id=id), params=get_default_params())
 
 
 @pytest.fixture(scope='module')
 def app_with_temp_board():
-    with MonkeyPatch().context() as monkeypatch:
-        session_tasks.init_env()
+    board_id = create_test_board()
 
-        board_id = create_test_board()
+    environ["BOARD_ID"] = board_id
 
-        monkeypatch.setattr(session_tasks, "BOARD_ID", board_id)
-        monkeypatch.setattr(session_tasks, "init_env", lambda: None)
-        environ["BOARD_ID"] = board_id
+    thread = Thread(target=lambda: todo_app.run(use_reloader=False))
 
-        thread = Thread(target=lambda: todo_app.run(use_reloader=False))
+    todo_app = app.create_app()
 
-        todo_app = app.create_app()
+    thread.daemon = True
+    thread.start()
 
-        print(session_tasks.BOARD_ID)
-        print(board_id)
+    sleep(1)
 
-        thread.daemon = True
-        thread.start()
+    yield todo_app
 
-        sleep(1)
+    thread.join(1)
 
-        yield todo_app
-
-        thread.join(1)
-
-        delete_test_board(board_id)
+    delete_test_board(board_id)
 
 
 @pytest.fixture(scope='module')

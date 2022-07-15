@@ -15,7 +15,7 @@ import pytest
 
 from todo_app.data import session_tasks
 from todo_app.data.env import get_default_params, get_organization_id, get_board_id
-from todo_app.data.session_tasks import BOARD_URL, BOARDS_URL
+from todo_app.data.session_tasks import BOARD_URL, BOARDS_URL, toggle
 
 
 def create_test_board():
@@ -68,6 +68,20 @@ def add_task(name, driver):
     add_name.send_keys(name)
     add_button = driver.find_element(By.ID, "btn-add")
     add_button.click()
+
+
+def find_action_button(name, driver, button_name):
+    label = driver.find_element(By.NAME, name)
+    parent: WebElement = label.find_element(By.XPATH, "./..")
+    button = parent.find_element(By.NAME, button_name)
+    return button
+
+
+def task_is(status, name, driver):
+    wanted_list = driver.find_element(By.ID, status)
+    unwanted_list = driver.find_element(By.ID, toggle(status))
+    assert wanted_list.find_elements(By.NAME, name)
+    assert not unwanted_list.find_elements(By.NAME, name)
 
 
 def test_app_loads(driver, app_with_temp_board):
@@ -129,8 +143,19 @@ def test_new_task_goes_to_incomplete(driver, app_with_temp_board):
 
     add_task(this_is_a_new_incomplete_task, driver)
 
-    incomplete_list = driver.find_element(By.ID, "incomplete")
-    assert incomplete_list.find_elements(By.NAME, this_is_a_new_incomplete_task)
+    task_is("incomplete", this_is_a_new_incomplete_task, driver)
 
-    complete_list = driver.find_element(By.ID, "complete")
-    assert len(complete_list.find_elements(By.NAME, this_is_a_new_incomplete_task)) == 0
+
+def test_switching_between_tasks(driver, app_with_temp_board):
+    this_is_an_incomplete_task = "This is an incomplete task"
+
+    driver.get("http://localhost:5000")
+
+    add_task(this_is_an_incomplete_task, driver)
+
+    task_is("incomplete", this_is_an_incomplete_task, driver)
+
+    change_status_button = find_action_button(this_is_an_incomplete_task, driver, "changestatus")
+    change_status_button.click()
+
+    task_is("complete", this_is_an_incomplete_task, driver)

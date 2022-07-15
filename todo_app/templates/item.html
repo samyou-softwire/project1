@@ -24,13 +24,15 @@
                     <input
                             type="submit"
                             class="btn btn-primary changestatus should-disable"
-                            value="Mark as Completed">
+                            value="Mark as Completed"
+                            name="changestatus">
                 {% endif %}
                 {% if item.status == "complete" %}
                     <input
                             type="submit"
                             class="btn btn-secondary changestatus should-disable"
-                            value="Mark as Incomplete">
+                            value="Mark as Incomplete"
+                            name="changestatus">
                 {% endif %}
                 <button type="button" class="btn btn-warning edit should-disable" onclick="edit_box('{{ item.id }}')">Edit</button>
                 <input type="submit" value="Submit" class="btn btn-warning submit d-none should-disable">

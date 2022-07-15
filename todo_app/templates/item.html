@@ -4,7 +4,7 @@
             <input type="hidden" name="id" value="{{ item.id }}">
             <input type="hidden" name="status" value="{{ item.status }}">
             <input type="hidden" name="submittype" class="submittype" value="">
-            <h4 class="col-sm mb-0">{{ item.title }}</h4>
+            <h4 class="col-sm mb-0" name="{{ item.title }}">{{ item.title }}</h4>
             <input
                     type="text"
                     class="form-control disabled col-sm description"
@@ -34,7 +34,7 @@
                 {% endif %}
                 <button type="button" class="btn btn-warning edit should-disable" onclick="edit_box('{{ item.id }}')">Edit</button>
                 <input type="submit" value="Submit" class="btn btn-warning submit d-none should-disable">
-                <input type="submit" class="btn btn-danger delete should-disable" value="Delete">
+                <input type="submit" class="btn btn-danger delete should-disable" value="Delete" name="delete">
             </div>
         </div>
     </form>

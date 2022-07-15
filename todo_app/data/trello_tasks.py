@@ -1,46 +1,21 @@
 from json import JSONDecodeError
-from os import getenv
 from typing import List
 
 import requests
 
+from todo_app.data.env import get_default_params, get_board_id
 from todo_app.data.task import Task
 
 
 BASE_URL = "https://api.trello.com/1/"
 
-BOARD_ID = None
-
-BOARD_URL = None
-BOARD_LISTS_URL = None
-LISTS_URL = None
-LIST_CARDS_URL = None
-CARD_URL = None
-CARDS_URL = None
-
-DEFAULT_PARAMS = {
-    'key': getenv("TRELLO_KEY"),
-    'token': getenv("TRELLO_TOKEN")
-}
-
-
-def init_env():
-    global BOARD_ID, BASE_URL, BOARD_URL, BOARD_LISTS_URL, LISTS_URL, \
-           LIST_CARDS_URL, CARD_URL, CARDS_URL, DEFAULT_PARAMS
-
-    BOARD_ID = getenv("BOARD_ID")
-
-    BOARD_URL = "%sboards/{id}" % BASE_URL
-    BOARD_LISTS_URL = "%sboards/{id}/lists" % BASE_URL
-    LISTS_URL = "%slists" % BASE_URL
-    LIST_CARDS_URL = "%slists/{id}/cards" % BASE_URL
-    CARD_URL = "%scards/{id}" % BASE_URL
-    CARDS_URL = "%scards" % BASE_URL
-
-    DEFAULT_PARAMS = {
-        'key': getenv("TRELLO_KEY"),
-        'token': getenv("TRELLO_TOKEN")
-    }
+BOARD_URL = "%sboards/{id}" % BASE_URL
+BOARDS_URL = "%sboards" % BASE_URL
+BOARD_LISTS_URL = "%sboards/{id}/lists" % BASE_URL
+LISTS_URL = "%slists" % BASE_URL
+LIST_CARDS_URL = "%slists/{id}/cards" % BASE_URL
+CARD_URL = "%scards/{id}" % BASE_URL
+CARDS_URL = "%scards" % BASE_URL
 
 
 def toggle(status):
@@ -52,14 +27,14 @@ def toggle(status):
 
 
 def get_or_create_list(name):
-    response = requests.get(BOARD_LISTS_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
+    response = requests.get(BOARD_LISTS_URL.format(id=get_board_id()), params=get_default_params()).json()
 
     id = next((list['id'] for list in response if list['name'] == name), None)
 
     # if this is ie a new board without the list made yet
     if id is None:
         create_list_params = {
-            **DEFAULT_PARAMS,
+            **get_default_params(),
             'name': name,
             'idBoard': get_long_board_id()
         }
@@ -85,14 +60,14 @@ def get_long_board_id():
     global _long_board_id
 
     if _long_board_id is None:
-        response = requests.get(BOARD_URL.format(id=BOARD_ID), params=DEFAULT_PARAMS).json()
+        response = requests.get(BOARD_URL.format(id=get_board_id()), params=get_default_params()).json()
         _long_board_id = response["id"]
 
     return _long_board_id
 
 
 def get_tasks_from_list(id, status):
-    response = requests.get(LIST_CARDS_URL.format(id=id), params=DEFAULT_PARAMS).json()
+    response = requests.get(LIST_CARDS_URL.format(id=id), params=get_default_params()).json()
 
     return [Task.from_card(card, status) for card in response]
 
@@ -122,7 +97,7 @@ def get_task(id) -> Task | None:
     """
 
     try:
-        response = requests.get(CARD_URL.format(id=id), params=DEFAULT_PARAMS).json()
+        response = requests.get(CARD_URL.format(id=id), params=get_default_params()).json()
     except JSONDecodeError:
         return None
 
@@ -150,7 +125,7 @@ def add_task(title):
     todo_list_id, _ = get_list_ids()
 
     add_params = {
-        **DEFAULT_PARAMS,
+        **get_default_params(),
         'idList': todo_list_id,
         'name': title
     }
@@ -168,7 +143,7 @@ def delete_task(id):
         id: The ID of the task.
     """
 
-    requests.delete(CARD_URL.format(id=id), params=DEFAULT_PARAMS)
+    requests.delete(CARD_URL.format(id=id), params=get_default_params())
 
 
 def save_task(task: Task):
@@ -184,7 +159,7 @@ def save_task(task: Task):
     list_id = done_list_id if task.status == "complete" else todo_list_id
 
     update_params = {
-        **DEFAULT_PARAMS,
+        **get_default_params(),
         'name': task.title,
         'idList': list_id,
         'desc': task.description,

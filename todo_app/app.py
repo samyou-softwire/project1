@@ -11,8 +11,6 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config())
 
-    session_tasks.init_env()
-
     @app.route('/')
     def index():
         tasks_view_model = ViewModel(get_tasks())

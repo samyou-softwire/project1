@@ -5,6 +5,7 @@ from time import sleep
 from _pytest.monkeypatch import MonkeyPatch
 from requests import post, delete
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 from todo_app import app
@@ -65,3 +66,15 @@ def test_app_loads(driver, app_with_temp_board):
     driver.get("http://localhost:5000")
 
     assert driver.title == 'To-Do App'
+
+
+def test_add_element(driver, app_with_temp_board):
+    driver.get("http://localhost:5000")
+
+    add_name = driver.find_element(By.ID, "itemtitle")
+    add_name.send_keys("This is a hard task")
+
+    add_button = driver.find_element(By.ID, "btn-add")
+    add_button.click()
+
+    assert "This is a hard task" in driver.page_source

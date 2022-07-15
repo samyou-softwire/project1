@@ -187,3 +187,34 @@ def test_adding_description(driver, app_with_temp_board):
     submit_button.click()
 
     assert new_description in driver.page_source
+
+
+def test_editing_description(driver, app_with_temp_board):
+    please_change_my_description = "Please change my description"
+    temp_description = "Temporary description"
+    replacement_description = "Replacement description"
+
+    driver.get("http://localhost:5000")
+
+    add_task(please_change_my_description, driver)
+
+    edit_button = find_task_element(please_change_my_description, driver, "edit")
+    edit_button.click()
+
+    description_box = find_task_element(please_change_my_description, driver, "description")
+    description_box.send_keys(temp_description)
+
+    submit_button = find_task_element(please_change_my_description, driver, "submit")
+    submit_button.click()
+
+    edit_button = find_task_element(please_change_my_description, driver, "edit")
+    edit_button.click()
+
+    description_box = find_task_element(please_change_my_description, driver, "description")
+    description_box.clear()
+    description_box.send_keys(replacement_description)
+
+    submit_button = find_task_element(please_change_my_description, driver, "submit")
+    submit_button.click()
+
+    assert replacement_description in driver.page_source

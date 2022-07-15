@@ -124,3 +124,17 @@ def test_delete_element_with_others_on_page(driver, app_with_temp_board):
     assert delete_me not in driver.page_source
     assert dont_delete_me in driver.page_source
     assert dont_delete_me2 in driver.page_source
+
+
+def test_new_task_goes_to_incomplete(driver, app_with_temp_board):
+    this_is_a_new_incomplete_task = "This is a new incomplete task"
+
+    driver.get("http://localhost:5000")
+
+    add_task(this_is_a_new_incomplete_task, driver)
+
+    incomplete_list = driver.find_element(By.ID, "incomplete")
+    assert incomplete_list.find_elements(By.NAME, this_is_a_new_incomplete_task)
+
+    complete_list = driver.find_element(By.ID, "complete")
+    assert len(complete_list.find_elements(By.NAME, this_is_a_new_incomplete_task)) == 0

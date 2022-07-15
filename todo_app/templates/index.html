@@ -12,9 +12,9 @@
         <div class="col-md-12">
             <h2>Items</h2>
             <h3>Incomplete</h3>
-            {{ item_list(view_model.incomplete_items()) }}
+            {{ item_list(view_model.incomplete_items(), "incomplete") }}
             <h3>Complete</h3>
-            {{ item_list(view_model.complete_items()) }}
+            {{ item_list(view_model.complete_items(), "complete") }}
             <h2>Add a new one</h2>
             <form id="addform" action="{{ url_for("add") }}" method="post">
                 <div class="form-group">

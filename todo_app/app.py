@@ -41,7 +41,7 @@ def create_app():
             task.due = dateparser.parse(due) if due else None
             save_task(task)
 
-        if submit_type == "delete" is not None:
+        if submit_type == "delete":
             delete_task(task.id)
 
         return redirect(url_for("index"))
